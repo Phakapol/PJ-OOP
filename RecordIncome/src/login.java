@@ -11,44 +11,45 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
 
-public class login implements ActionListener {
+public class Login implements ActionListener {
     private JFrame fr;
     private JPanel p1, p2, p3, p4;
-    private JLabel lbl1, lbl2, lbl3;
-    private JTextField txt1, txt2;
-    private JButton btn1, btn2;
+    private JLabel Username, Password, lbl3;
+    private JTextField Username_txt, Password_txt;
+    private JButton SignIn, SignUp;    
     
-    public login() {
-        fr = new JFrame("Login");
+    public Login() {
+        fr = new JFrame("RecordIncome");
         p1 = new JPanel();
         p2 = new JPanel();
         p3 = new JPanel();
         p4 = new JPanel();
-        txt1 = new JTextField();
-        txt2 = new JTextField();
-        lbl1 = new JLabel("Username");
-        lbl2 = new JLabel("Password");
+        Username_txt = new JTextField();
+        Password_txt = new JTextField();
+        Username = new JLabel("Username");
+        Password = new JLabel("Password");
         lbl3 = new JLabel("...");
-        btn1 = new JButton("Sign In");
-        btn2 = new JButton("Sign Up");
+        SignIn = new JButton("Sign In");
+        SignUp = new JButton("Sign Up");
         
-        btn1.addActionListener(this);
-        btn2.addActionListener(this);
+        SignIn.addActionListener(this);
+        SignUp.addActionListener(this);
         
         fr.setLayout(new GridLayout(4,1));
         p1.setLayout(new GridLayout(1,2));
         p2.setLayout(new GridLayout(1,2));
         p3.setLayout(new FlowLayout());
         
-        p1.add(lbl1);
-        p1.add(txt1);
+        p1.add(Username);
+        p1.add(Username_txt);
         
-        p2.add(lbl2);
-        p2.add(txt2);
+        p2.add(Password);
+        p2.add(Password_txt);
         
-        p3.add(btn1);
-        p3.add(btn2);
+        p3.add(SignIn);
+        p3.add(SignUp);
         
         p4.add(lbl3);
         
@@ -63,20 +64,50 @@ public class login implements ActionListener {
     }
     
     public static void main(String[] args) {
-        new login();
+        new Login();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource().equals(btn1)){
-            if(txt1.getText().equals("") || txt2.getText().equals("")){
-                lbl3.setText("Error");
-            }else{
-                lbl3.setText("Success");
+        if(e.getSource().equals(SignIn)){
+            Connection connect = null;
+            PreparedStatement pre = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root","147258");
+                
+                String sql = "SELECT * FROM user WHERE user_name=? and user_pass=?";
+                pre = connect.prepareStatement(sql);
+                
+                pre.setString(1, Username_txt.getText());
+                pre.setString(2, Password_txt.getText());
+                
+                //pre.executeUpdate();
+                ResultSet rs = pre.executeQuery();
+                
+                System.out.println("Done It");
+                
+                if (rs.next()) {
+                    lbl3.setText("Username and Password Matched");
+                    Username_txt.setText("");
+                    Password_txt.setText("");
+                } else {
+                    lbl3.setText("Username and Password not Correct");
+                    Username_txt.setText("");
+                    Password_txt.setText("");
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } try {
+                pre.close();
+                connect.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        }else if(e.getSource().equals(btn2)){
-            new register();
+        }else if(e.getSource().equals(SignUp)){
+            new Register();
             fr.setVisible(false);
         }
     }
 }
+

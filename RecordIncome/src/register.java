@@ -11,19 +11,16 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.sql.*;
 
-public class register implements ActionListener {
+public class Register implements ActionListener {
     private JFrame fr;
     private JPanel p1, p2, p3, p4;
     private JLabel lbl1, lbl2, lbl3;
     private JTextField txt1, txt2;
     private JButton btn1, btn2;
-    String []p;
     
-    public register() {
+    public Register() {
         fr = new JFrame("Login");
         p1 = new JPanel();
         p2 = new JPanel();
@@ -65,40 +62,9 @@ public class register implements ActionListener {
         fr.setSize(400, 200);
         fr.setVisible(true);
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
-       if(e.getSource().equals(btn1)){
-            if(txt1.getText().equals("") || txt2.getText().equals("")){
-                lbl3.setText("Error");
-            }else{
-                Person pin = new Person(txt1.getText(), txt2.getText());
-                try {
-                    FileOutputStream fout = new FileOutputStream("User.dat");
-                    ObjectOutputStream oout = new ObjectOutputStream(fout);
-                    oout.writeObject(pin);
-                    oout.close();
-                    fout.close();
-                    FileInputStream fin = new FileInputStream("User.dat");
-                    ObjectInputStream oin = new ObjectInputStream(fin);
-                    Person pout = (Person) oin.readObject();
-                    System.out.println(pout.getUser());
-                    System.out.println(pout.getPass());
-                    oin.close();
-                    fin.close();
-                } catch (FileNotFoundException ex) {
-                    Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(register.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                new login();
-                fr.setVisible(false);
-            }
-        }else if(e.getSource().equals(btn2)){
-            new login();
-            fr.setVisible(false);
-        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
