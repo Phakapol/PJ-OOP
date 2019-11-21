@@ -7,7 +7,7 @@ public class Login implements ActionListener, FocusListener {
 
     private JFrame fr;
     private JPanel p;
-    private JLabel lbl;
+    private JLabel Error;
     private JTextField Username_txt, Password_txt;
     private JButton SignIn, SignUp;
 
@@ -16,7 +16,7 @@ public class Login implements ActionListener, FocusListener {
         p = new JPanel();
         Username_txt = new JTextField("Username");
         Password_txt = new JTextField("Password");
-        lbl = new JLabel();
+        Error = new JLabel();
         SignIn = new JButton("Sign In");
         SignUp = new JButton("Sign Up");
 
@@ -31,17 +31,15 @@ public class Login implements ActionListener, FocusListener {
 
         Username_txt.setBounds(100, 90, 180, 30);
         Password_txt.setBounds(100, 130, 180, 30);
-
         SignIn.setBounds(100, 180, 180, 30);
         SignUp.setBounds(100, 220, 180, 30);
-
-        lbl.setBounds(85, 270, 400, 30);
+        Error.setBounds(85, 270, 400, 30);
 
         p.add(Username_txt);
         p.add(Password_txt);
         p.add(SignIn);
         p.add(SignUp);
-        p.add(lbl);
+        p.add(Error);
 
         fr.add(p);
 
@@ -54,6 +52,7 @@ public class Login implements ActionListener, FocusListener {
 
     public static void main(String[] args) {
         new Login();
+        System.out.println("ฟหกฟหก");
     }
 
     @Override
@@ -77,7 +76,7 @@ public class Login implements ActionListener, FocusListener {
                     new Home();
                     fr.dispose();
                 } else {
-                    lbl.setText("Username and Password not Correct");
+                    Error.setText("Username Or Password Not Correct");
                     Username_txt.setText("");
                     Password_txt.setText("");
                 }
