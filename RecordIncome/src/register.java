@@ -54,9 +54,10 @@ public class Register implements ActionListener {
         fr.add(p3);
         
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fr.setSize(400, 200);
+        fr.setSize(500, 500);
         fr.setVisible(true);
         fr.setLocationRelativeTo(null);
+        fr.setResizable(false);
     }
 
     @Override
@@ -75,7 +76,7 @@ public class Register implements ActionListener {
                 pre.setString(2, Password_txt.getText());
                 
                 pre.executeUpdate();
-                System.out.println("Done It");
+                
             } catch (Exception ex) {
                 ex.printStackTrace();
             } try {

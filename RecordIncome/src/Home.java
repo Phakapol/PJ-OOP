@@ -41,7 +41,7 @@ public class Home {
         fr.add(p2);
 
         fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        fr.setSize(400, 200);
+        fr.setSize(500, 500);
         fr.setVisible(true);
         fr.setLocationRelativeTo(null);
     }
