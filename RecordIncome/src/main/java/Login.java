@@ -1,27 +1,28 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.sql.*;
 
 public class Login implements ActionListener, FocusListener {
 
     private JFrame fr;
     private JPanel p;
-    private JLabel Error;
+    private JLabel Username_lbl, Password_lbl, Error_lbl;
     private JTextField Username_txt, Password_txt;
-    private JButton SignIn, SignUp;
+    private JButton SignIn_btn, SignUp_btn;
 
-    public Login() {
+    public Login () {
         fr = new JFrame("RecordIncome");
         p = new JPanel();
+        Username_lbl = new JLabel("Username :");
+        Password_lbl = new JLabel("Password :");
+        Error_lbl = new JLabel();
         Username_txt = new JTextField("Username");
         Password_txt = new JTextField("Password");
-        Error = new JLabel();
-        SignIn = new JButton("Sign In");
-        SignUp = new JButton("Sign Up");
+        SignIn_btn = new JButton("Sign In");
+        SignUp_btn = new JButton("Sign Up");
 
-        SignIn.addActionListener(this);
-        SignUp.addActionListener(this);
+        SignIn_btn.addActionListener(this);
+        SignUp_btn.addActionListener(this);
 
         Username_txt.addFocusListener(this);
         Password_txt.addFocusListener(this);
@@ -29,17 +30,21 @@ public class Login implements ActionListener, FocusListener {
         fr.setLayout(new GridLayout(1, 1));
         p.setLayout(null);
 
+        Username_lbl.setBounds(100, 60, 180, 30);
         Username_txt.setBounds(100, 90, 180, 30);
-        Password_txt.setBounds(100, 130, 180, 30);
-        SignIn.setBounds(100, 180, 180, 30);
-        SignUp.setBounds(100, 220, 180, 30);
-        Error.setBounds(85, 270, 400, 30);
+        Password_lbl.setBounds(100, 120, 180, 30);
+        Password_txt.setBounds(100, 150, 180, 30);
+        SignIn_btn.setBounds(100, 190, 180, 30);
+        SignUp_btn.setBounds(100, 230, 180, 30);
+        Error_lbl.setBounds(85, 280, 400, 30);
 
+        p.add(Username_lbl);
         p.add(Username_txt);
+        p.add(Password_lbl);
         p.add(Password_txt);
-        p.add(SignIn);
-        p.add(SignUp);
-        p.add(Error);
+        p.add(SignIn_btn);
+        p.add(SignUp_btn);
+        p.add(Error_lbl);
 
         fr.add(p);
 
@@ -52,44 +57,14 @@ public class Login implements ActionListener, FocusListener {
 
     public static void main(String[] args) {
         new Login();
-        System.out.println("ฟหกฟหก");
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource().equals(SignIn)) {
-            Connection connect = null;
-            PreparedStatement pre = null;
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root", "147258");
-
-                String sql = "SELECT * FROM user WHERE user_name=? and user_pass=?";
-                pre = connect.prepareStatement(sql);
-
-                pre.setString(1, Username_txt.getText());
-                pre.setString(2, Password_txt.getText());
-
-                ResultSet rec = pre.executeQuery();
-
-                if (rec.next()) {
-                    new Home();
-                    fr.dispose();
-                } else {
-                    Error.setText("Username Or Password Not Correct");
-                    Username_txt.setText("");
-                    Password_txt.setText("");
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            try {
-                pre.close();
-                connect.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-            }
-        } else if (ae.getSource().equals(SignUp)) {
+        if (ae.getSource().equals(SignIn_btn)) {
+            new Home();
+            fr.dispose();
+        } else if (ae.getSource().equals(SignUp_btn)) {
             new Register();
             fr.dispose();
         }
