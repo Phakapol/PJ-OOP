@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.*;
+import java.sql.Date;
 import java.time.*;
 import java.time.format.*;
 import java.util.*;
@@ -18,6 +20,8 @@ public class Record implements ActionListener{
 
     private String user;
     private int id;
+
+    private double Total_val;
 
     public Record () {
 
@@ -85,35 +89,73 @@ public class Record implements ActionListener{
         fr.setLocationRelativeTo(null);
         fr.setResizable(false);
 
-        Connection connect = null;
-        PreparedStatement pre = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root" ,"147258");
-            String sql = "SELECT * FROM record WHERE user_id=? and user_name=?";
-            pre = connect.prepareStatement(sql);
-            pre.setInt(1, id);
-            pre.setString(2, user);
-            ResultSet rec = pre.executeQuery();
-            while (rec.next());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } try {
-            pre.close();
-            connect.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            FileInputStream fin;
+            DataInputStream din;
+            fin = new FileInputStream("data.dat");
+            din = new DataInputStream(fin);
+            id = din.readInt();
+            user = din.readUTF();
+            din.close();
+            fin.close();
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
         }
+
+//        Connection connect = null;
+//        PreparedStatement pre = null;
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root" ,"147258");
+//            String sql = "SELECT * FROM record WHERE user_id=? and user_name=?";
+//            pre = connect.prepareStatement(sql);
+//            pre.setInt(1, id);
+//            pre.setString(2, user);
+//            ResultSet rec = pre.executeQuery();
+//            while ((rec != null) && (rec.next())) {
+//                model.addRow(new Object[] {rec.getDate("record_date"), rec.getTime("record_time"), rec.getString("record_cause"), rec.getString("record_money_use"), rec.getDouble("record_money_total")});
+//                Total_val = rec.getDouble("record_money_total");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } try {
+//            pre.close();
+//            connect.close();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource().equals(Up_btn)) {
-//            double Up = Double.parseDouble()
+//            double Up = Double.parseDouble(Money_txt.getText());
+//            Total_val += Up;
 //            LocalDateTime DayNow = LocalDateTime.now();
+//            String Add_money = "+++ " + Up;
 //            String Real_DayNow = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH).format(DayNow);
 //            String Real_TimeNow = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.ENGLISH).format(DayNow);
 //            String Real_cause = Cause_txt.getText();
+
+            Connection connect = null;
+            PreparedStatement pre = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root","147258");
+
+//                String sql = "INSERT INTO record (user_id, user_name) VALUES (?, ?)";
+//                pre = connect.prepareStatement(sql);
+//
+//                pre.executeUpdate();
+
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            } try {
+                pre.close();
+                connect.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         } else if (ae.getSource().equals(Down_btn)) {
 
         } else if (ae.getSource().equals(Home_btn)) {
