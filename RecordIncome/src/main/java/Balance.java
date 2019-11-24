@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.time.Month;
 import javax.swing.*;
 
 public class Balance implements ActionListener {
@@ -9,6 +10,7 @@ public class Balance implements ActionListener {
     private JLabel Day_lbl, Week_lbl, Month_lbl;
     private JTextField Money_txt, Day_txt, Week_txt, Month_txt, Cal_txt;
     private JButton Cal_btn, Home_btn;
+    int Month_val, Week_val, Day_val, AllDay_val;
 
     public Balance () {
         fr = new JFrame("RecordIncome");
@@ -68,7 +70,22 @@ public class Balance implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource().equals(Cal_btn)) {
-
+            if (Month_txt.getText().equals("")) {
+            } else {
+                Month_val = Integer.parseInt(Month_txt.getText()) * 30;
+            }
+            if (Week_txt.getText().equals("")) {
+            } else {
+                Week_val = Integer.parseInt(Week_txt.getText()) * 7;
+            }
+            if (Day_txt.getText().equals("")) {
+            } else {
+                Day_val = Integer.parseInt(Day_txt.getText());
+            }
+            AllDay_val = Month_val + Week_val + Day_val;
+        } else if (ae.getSource().equals(Home_btn)) {
+            new Home();
+            fr.dispose();
         }
     }
 }

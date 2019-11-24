@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.*;
+import java.sql.*;
 
 public class Login implements ActionListener, FocusListener {
 
@@ -30,13 +32,21 @@ public class Login implements ActionListener, FocusListener {
         fr.setLayout(new GridLayout(1, 1));
         p.setLayout(null);
 
-        Username_lbl.setBounds(100, 60, 180, 30);
+        Username_lbl.setBounds(100, 50, 180, 30);
         Username_txt.setBounds(100, 90, 180, 30);
         Password_lbl.setBounds(100, 120, 180, 30);
-        Password_txt.setBounds(100, 150, 180, 30);
-        SignIn_btn.setBounds(100, 190, 180, 30);
-        SignUp_btn.setBounds(100, 230, 180, 30);
-        Error_lbl.setBounds(85, 280, 400, 30);
+        Password_txt.setBounds(100, 160, 180, 30);
+        SignIn_btn.setBounds(100, 205, 180, 35);
+        SignUp_btn.setBounds(100, 250, 180, 35);
+        Error_lbl.setBounds(65, 300, 400, 30);
+
+        Username_lbl.setFont(new Font("ANGSANA NEW", Font.BOLD, 30));
+        Username_txt.setFont(new Font("ANGSANA NEW", Font.PLAIN, 25));
+        Password_lbl.setFont(new Font("ANGSANA NEW", Font.BOLD, 30));
+        Password_txt.setFont(new Font("ANGSANA NEW", Font.PLAIN, 25));
+        SignIn_btn.setFont(new Font("ANGSANA NEW", Font.BOLD, 30));
+        SignUp_btn.setFont(new Font("ANGSANA NEW", Font.BOLD, 30));
+        Error_lbl.setFont(new Font("ANGSANA NEW", Font.BOLD, 25));
 
         p.add(Username_lbl);
         p.add(Username_txt);
@@ -62,8 +72,47 @@ public class Login implements ActionListener, FocusListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource().equals(SignIn_btn)) {
-            new Home();
-            fr.dispose();
+            Connection connect = null;
+            PreparedStatement pre = null;
+            try {
+                Class.forName("com.mysql.jdbc.Driver");
+                connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root" ,"147258");
+                String sql = "SELECT * FROM user WHERE user_name=? and user_pass=?";
+                pre = connect.prepareStatement(sql);
+                pre.setString(1, Username_txt.getText());
+                pre.setString(2, Password_txt.getText());
+                ResultSet rec = pre.executeQuery();
+                if (rec.next()) {
+                    try {
+                        FileOutputStream fout;
+                        DataOutputStream dout;
+                        fout = new FileOutputStream("data.dat");
+                        dout = new DataOutputStream(fout);
+                        dout.writeInt(rec.getInt("user_id"));
+                        dout.writeUTF(rec.getString("user_name"));
+                        dout.close();
+                        fout.close();
+                    } catch (IOException ex) {
+                        ex.toString();
+                    }
+                    if (rec.getFloat("user_balance") == 0) {
+                        new Balance();
+                        fr.dispose();
+                    } else {
+                        new Home();
+                        fr.dispose();
+                    }
+                } else {
+                    Error_lbl.setText("Username or Password is not correct");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } try {
+                pre.close();
+                connect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } else if (ae.getSource().equals(SignUp_btn)) {
             new Register();
             fr.dispose();

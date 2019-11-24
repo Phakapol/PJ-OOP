@@ -1,7 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-//import java.sql.*;
+import java.sql.*;
 
 public class Register implements ActionListener {
     private JFrame fr;
@@ -88,31 +88,31 @@ public class Register implements ActionListener {
                 Error_lbl.setBounds(140, 430, 180, 30);
                 Error_lbl.setText("Please Enter Email");
             } else {
-//                Connection connect = null;
-//                PreparedStatement pre = null;
-//                try {
-//                    Class.forName("com.mysql.jdbc.Driver");
-//                    connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root","147258");
-//
-//                    String sql = "INSERT INTO user (user_name, user_pass, user_firstname, user_lastname, user_email) VALUES (?, ?, ?, ?, ?)";
-//                    pre = connect.prepareStatement(sql);
-//
-//                    pre.setString(1, Username_txt.getText());
-//                    pre.setString(2, Password_txt.getText());
-//                    pre.setString(3, Firstname_txt.getText());
-//                    pre.setString(4, Lastname_txt.getText());
-//                    pre.setString(5, Email_txt.getText());
-//
-//                    pre.executeUpdate();
-//
-//                } catch (Exception ex) {
-//                    ex.printStackTrace();
-//                } try {
-//                    pre.close();
-//                    connect.close();
-//                } catch (SQLException ex) {
-//                    ex.printStackTrace();
-//                }
+                Connection connect = null;
+                PreparedStatement pre = null;
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root","147258");
+
+                    String sql = "INSERT INTO user (user_name, user_pass, user_firstname, user_lastname, user_email) VALUES (?, ?, ?, ?, ?)";
+                    pre = connect.prepareStatement(sql);
+
+                    pre.setString(1, Username_txt.getText());
+                    pre.setString(2, Password_txt.getText());
+                    pre.setString(3, Firstname_txt.getText());
+                    pre.setString(4, Lastname_txt.getText());
+                    pre.setString(5, Email_txt.getText());
+
+                    pre.executeUpdate();
+
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                } try {
+                    pre.close();
+                   connect.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
                 new Login();
                 fr.dispose();
             }
