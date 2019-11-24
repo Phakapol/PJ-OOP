@@ -93,7 +93,7 @@ public class Login implements ActionListener, FocusListener {
                         dout.close();
                         fout.close();
                     } catch (IOException ex) {
-                        ex.toString();
+                        System.out.println(ex.toString());
                     }
                     if (rec.getFloat("user_balance") == 0) {
                         new Balance();

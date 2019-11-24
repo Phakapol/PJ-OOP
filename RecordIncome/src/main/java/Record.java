@@ -3,6 +3,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.time.*;
+import java.time.format.*;
+import java.util.*;
+import java.sql.*;
 
 public class Record implements ActionListener{
 
@@ -12,6 +15,9 @@ public class Record implements ActionListener{
     private JButton Up_btn, Down_btn, Home_btn;
     private JTable Record_table;
     private JScrollPane ScrollPane;
+
+    private String user;
+    private int id;
 
     public Record () {
 
@@ -78,17 +84,45 @@ public class Record implements ActionListener{
         fr.setVisible(true);
         fr.setLocationRelativeTo(null);
         fr.setResizable(false);
+
+        Connection connect = null;
+        PreparedStatement pre = null;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root" ,"147258");
+            String sql = "SELECT * FROM record WHERE user_id=? and user_name=?";
+            pre = connect.prepareStatement(sql);
+            pre.setInt(1, id);
+            pre.setString(2, user);
+            ResultSet rec = pre.executeQuery();
+            while (rec.next());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } try {
+            pre.close();
+            connect.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource().equals(Up_btn)) {
-
+//            double Up = Double.parseDouble()
+//            LocalDateTime DayNow = LocalDateTime.now();
+//            String Real_DayNow = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH).format(DayNow);
+//            String Real_TimeNow = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.ENGLISH).format(DayNow);
+//            String Real_cause = Cause_txt.getText();
         } else if (ae.getSource().equals(Down_btn)) {
 
         } else if (ae.getSource().equals(Home_btn)) {
             new Home();
             fr.dispose();
         }
+    }
+
+    public static void main(String[] args) {
+        new Record();
     }
 }

@@ -153,8 +153,8 @@ public class Dairy extends javax.swing.JFrame {
         total += up;
         LocalDateTime DayNow = LocalDateTime.now();
         String add_money = "+" + money.getText();
-        String Real_DayNow = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH).format(DayNow);
-        String Real_TimeNow = DateTimeFormatter.ofPattern("HH:mm:ss", Locale.ENGLISH).format(DayNow);
+        String Real_DayNow = DateTimeFormatter.ofPattern("YYYY/MM/DD", Locale.ENGLISH).format(DayNow);
+        String Real_TimeNow = DateTimeFormatter.ofPattern("HH:MM:SS", Locale.ENGLISH).format(DayNow);
         String Real_cause = cause.getText();
         addMoneyToTable(Real_DayNow, Real_TimeNow, Real_cause, add_money, total);
 

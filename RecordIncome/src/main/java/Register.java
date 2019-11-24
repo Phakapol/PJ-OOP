@@ -109,7 +109,7 @@ public class Register implements ActionListener {
                     ex.printStackTrace();
                 } try {
                     pre.close();
-                   connect.close();
+                    connect.close();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }

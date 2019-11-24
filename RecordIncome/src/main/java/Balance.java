@@ -1,7 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.time.Month;
 import javax.swing.*;
+import java.sql.*;
+import java.io.*;
+
 
 public class Balance implements ActionListener {
 
@@ -10,7 +12,11 @@ public class Balance implements ActionListener {
     private JLabel Day_lbl, Week_lbl, Month_lbl;
     private JTextField Money_txt, Day_txt, Week_txt, Month_txt, Cal_txt;
     private JButton Cal_btn, Home_btn;
-    int Month_val, Week_val, Day_val, AllDay_val;
+
+    private int AllDay_val, Cal_val;
+
+    private String user;
+    private int id;
 
     public Balance () {
         fr = new JFrame("RecordIncome");
@@ -70,19 +76,64 @@ public class Balance implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource().equals(Cal_btn)) {
-            if (Month_txt.getText().equals("")) {
+            if (Month_txt.getText().equals("") && Week_txt.getText().equals("") && Day_txt.getText().equals("")) {
+                AllDay_val = 0;
+            } else if (Month_txt.getText().equals("") && Week_txt.getText().equals("")) {
+                AllDay_val = Integer.parseInt(Day_txt.getText());
+            } else if (Month_txt.getText().equals("") && Day_txt.getText().equals("")) {
+                AllDay_val = Integer.parseInt(Week_txt.getText()) * 7;
+            } else if (Week_txt.getText().equals("") && Day_txt.getText().equals("")) {
+                AllDay_val = Integer.parseInt(Month_txt.getText()) * 30;
+            } else if (Month_txt.getText().equals("")) {
+                AllDay_val = Integer.parseInt(Week_txt.getText()) * 7 + Integer.parseInt(Day_txt.getText());
+            } else if (Week_txt.getText().equals("")) {
+                AllDay_val = Integer.parseInt(Month_txt.getText()) * 30 + Integer.parseInt(Day_txt.getText());
+            } else if (Day_txt.getText().equals("")) {
+                AllDay_val = Integer.parseInt(Month_txt.getText()) * 30 + Integer.parseInt(Week_txt.getText()) * 7;
             } else {
-                Month_val = Integer.parseInt(Month_txt.getText()) * 30;
+                AllDay_val = Integer.parseInt(Month_txt.getText()) * 30 + Integer.parseInt(Week_txt.getText()) * 7 + Integer.parseInt(Day_txt.getText());
             }
-            if (Week_txt.getText().equals("")) {
+
+            if (Money_txt.getText().equals("") || AllDay_val == 0) {
             } else {
-                Week_val = Integer.parseInt(Week_txt.getText()) * 7;
+                Cal_val = Integer.parseInt(Money_txt.getText()) / AllDay_val;
+                Cal_txt.setText(String.valueOf((int) Cal_val));
+
+                try {
+                    FileInputStream fin;
+                    DataInputStream din;
+                    fin = new FileInputStream("data.dat");
+                    din = new DataInputStream(fin);
+                    id = din.readInt();
+                    user = din.readUTF();
+                    din.close();
+                    fin.close();
+                } catch (IOException ex) {
+                    System.out.println(ex.toString());
+                }
+
+                Connection connect = null;
+                PreparedStatement pre = null;
+                try {
+                    Class.forName("com.mysql.jdbc.Driver");
+                    connect = DriverManager.getConnection("jdbc:mysql://localhost/RecordIncome", "root","147258");
+
+                    String sql = "UPDATE user SET user_balance=? WHERE user_id=? and user_name=?";
+                    pre = connect.prepareStatement(sql);
+                    pre.setInt(1, Cal_val);
+                    pre.setInt(2, id);
+                    pre.setString(3, user);
+
+                    pre.executeUpdate();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                } try {
+                    pre.close();
+                    connect.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
-            if (Day_txt.getText().equals("")) {
-            } else {
-                Day_val = Integer.parseInt(Day_txt.getText());
-            }
-            AllDay_val = Month_val + Week_val + Day_val;
         } else if (ae.getSource().equals(Home_btn)) {
             new Home();
             fr.dispose();
